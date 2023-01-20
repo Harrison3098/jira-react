@@ -7,6 +7,8 @@
 import React, { ReactNode, useState } from "react";
 import * as auth from "auth-provider";
 import { User } from "auth-provider";
+import { http } from "../http";
+import { useMount } from "../hook";
 
 type AuthForm = {
   username: string;
@@ -24,12 +26,22 @@ const AuthContext = React.createContext<
 >(undefined);
 AuthContext.displayName = "AuthContext";
 
+const initUser = async () => {
+  const token = auth.getToken();
+  if (!token) return null;
+
+  const { user } = await http("me", { token });
+  return user;
+};
+
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
 
   const login = (form: AuthForm) => auth.login(form).then(setUser);
   const register = (form: AuthForm) => auth.register(form).then(setUser);
   const logout = () => auth.logout().then(() => setUser(null));
+
+  useMount(() => initUser().then(setUser));
 
   return (
     <AuthContext.Provider value={{ user, login, register, logout }}>
