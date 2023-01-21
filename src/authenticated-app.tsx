@@ -6,14 +6,23 @@
  */
 import { useAuth } from "context/auth-context";
 import styled from "@emotion/styled";
+import { Row } from "./components";
 
 export const AuthenticatedApp = () => {
   const { logout } = useAuth();
 
   return (
     <Container>
-      <Header>
-        <button onClick={logout}>登出</button>
+      <Header as={"header"} between={true}>
+        <HeaderLeft gap={true}>
+          <h3>LOGO</h3>
+          <h3>项目</h3>
+          <h3>用户</h3>
+        </HeaderLeft>
+
+        <HeaderRight>
+          <button onClick={logout}>登出</button>
+        </HeaderRight>
       </Header>
 
       <Nav>nav</Nav>
@@ -41,7 +50,7 @@ const Container = styled.div`
 
 // grid-area 用来给grid子元素起名字
 const [Header, Main, Nav, Aside, Footer] = [
-  styled.header`
+  styled(Row)`
     grid-area: header;
   `,
   styled.main`
@@ -57,3 +66,5 @@ const [Header, Main, Nav, Aside, Footer] = [
     grid-area: footer;
   `,
 ];
+
+const [HeaderLeft, HeaderRight] = [styled(Row)``, styled.div``];
