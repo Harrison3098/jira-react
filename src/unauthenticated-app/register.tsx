@@ -4,9 +4,10 @@
  * @Date       	: 2023-01-20 星期五 02:21:08
  * @FilePath	: jira/src/unauthenticated-app/register.tsx
  */
-import React, { FormEvent } from "react";
+import React from "react";
 import { useAuth } from "context/auth-context";
-import { Button, Form, Input } from "antd";
+import { Form, Input } from "antd";
+import { LoginButton } from "./";
 
 export const RegisterScreen = () => {
   const { register, user } = useAuth();
@@ -31,9 +32,9 @@ export const RegisterScreen = () => {
         <Input placeholder={"密码"} type="password" id={"password"} />
       </Form.Item>
 
-      <Button htmlType={"submit"} type={"primary"}>
+      <LoginButton htmlType={"submit"} type={"primary"}>
         注册
-      </Button>
+      </LoginButton>
     </Form>
   );
 };
