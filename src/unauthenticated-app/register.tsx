@@ -8,12 +8,27 @@ import React from "react";
 import { useAuth } from "context/auth-context";
 import { Form, Input } from "antd";
 import { LoginButton } from "./";
+import { useAsync } from "hook";
 
-export const RegisterScreen = () => {
-  const { register, user } = useAuth();
+export const RegisterScreen = ({
+  onError,
+}: {
+  onError: (err: Error) => void;
+}) => {
+  const { register } = useAuth();
+  const { run, isLoading } = useAsync(undefined, { throwOnError: true });
 
-  const handleSubmit = (values: { username: string; password: string }) => {
-    register(values);
+  const handleSubmit = ({
+    cpassword,
+    ...values
+  }: {
+    username: string;
+    password: string;
+    cpassword: string;
+  }) => {
+    Object.is(cpassword, values.password)
+      ? run(register(values)).catch(onError)
+      : onError(new Error("两次输入的密码不一致"));
   };
 
   return (
@@ -32,7 +47,14 @@ export const RegisterScreen = () => {
         <Input placeholder={"密码"} type="password" id={"password"} />
       </Form.Item>
 
-      <LoginButton htmlType={"submit"} type={"primary"}>
+      <Form.Item
+        name={"cpassword"}
+        rules={[{ required: true, message: "请输入密码" }]}
+      >
+        <Input placeholder={"再次确认密码"} type="password" id={"cpassword"} />
+      </Form.Item>
+
+      <LoginButton loading={isLoading} htmlType={"submit"} type={"primary"}>
         注册
       </LoginButton>
     </Form>

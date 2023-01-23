@@ -22,9 +22,9 @@ export const login = (data: { username: string; password: string }) => {
     },
     body: JSON.stringify(data),
   }).then(async (res) => {
-    if (res.ok) return handleUserResponse(await res.json());
+    const data = await res.json();
 
-    return Promise.reject(data);
+    return res.ok ? handleUserResponse(data) : Promise.reject(data);
   });
 };
 
@@ -36,9 +36,9 @@ export const register = (data: { username: string; password: string }) => {
     },
     body: JSON.stringify(data),
   }).then(async (res) => {
-    if (res.ok) return handleUserResponse(await res.json());
+    const data = await res.json();
 
-    return Promise.reject(data);
+    return res.ok ? handleUserResponse(data) : Promise.reject(data);
   });
 };
 

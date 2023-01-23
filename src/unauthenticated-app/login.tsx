@@ -8,12 +8,21 @@ import React from "react";
 import { useAuth } from "context/auth-context";
 import { Form, Input } from "antd";
 import { LoginButton } from "./";
+import { useAsync } from "hook";
 
-export const LoginScreen = () => {
-  const { login, user } = useAuth();
+export const LoginScreen = ({ onError }: { onError: (err: Error) => void }) => {
+  const { login } = useAuth();
+  const { run, isLoading } = useAsync(undefined, { throwOnError: true });
 
-  const handleSubmit = (values: { username: string; password: string }) => {
-    login(values);
+  const handleSubmit = async (values: {
+    username: string;
+    password: string;
+  }) => {
+    try {
+      await run(login(values));
+    } catch (e) {
+      onError(e as Error);
+    }
   };
 
   return (
@@ -32,7 +41,7 @@ export const LoginScreen = () => {
         <Input placeholder={"密码"} type="password" id={"password"} />
       </Form.Item>
 
-      <LoginButton htmlType={"submit"} type={"primary"}>
+      <LoginButton loading={isLoading} htmlType={"submit"} type={"primary"}>
         登录
       </LoginButton>
     </Form>
