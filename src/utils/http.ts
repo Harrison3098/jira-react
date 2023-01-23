@@ -56,5 +56,5 @@ export const useHttp = () => {
 
 type Config = RequestInit & {
   token?: string;
-  data?: object;
+  data?: { [key: string]: unknown };
 };

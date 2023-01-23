@@ -12,7 +12,9 @@ export { http, useHttp } from "./http";
  * @param {T} obj
  * @returns {T}
  */
-export const cleanObject = <T extends object>(obj?: T) => {
+export const cleanObject = <T extends { [key: string]: K }, K = unknown>(
+  obj?: T
+) => {
   if (!obj) return {};
 
   return Object.entries(obj).reduce((tempObj, [key, value]) => {
