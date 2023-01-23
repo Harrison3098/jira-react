@@ -14,6 +14,7 @@ export const SearchPanel = ({ users, param, setParam }: SearchPanelProps) => {
     <Form style={{ marginBottom: "2rem" }} layout={"inline"}>
       <Form.Item>
         <Input
+          placeholder={"项目名"}
           type="text"
           value={param.name}
           onChange={(e) => setParam({ ...param, name: e.target.value })}
@@ -22,9 +23,14 @@ export const SearchPanel = ({ users, param, setParam }: SearchPanelProps) => {
 
       <Form.Item>
         <Select
+          placeholder={"负责人"}
           value={param.personId}
           onChange={(v) => setParam({ ...param, personId: v })}
         >
+          <Select.Option value={""} key={"all"}>
+            全部人
+          </Select.Option>
+
           {users.map((i) => (
             <Select.Option value={i.id} key={i.id}>
               {i.name}

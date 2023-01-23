@@ -40,7 +40,7 @@ export const http = async (
       return Promise.reject({ message: "请重新登录" });
     }
 
-    const data = res.json();
+    const data = await res.json();
     return res.ok ? data : Promise.reject(data);
   } catch (e) {
     return Promise.reject(e);

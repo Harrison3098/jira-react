@@ -7,7 +7,8 @@
 import React, { ReactNode, useState } from "react";
 import * as auth from "auth-provider";
 import { User } from "auth-provider";
-import { http, useMount } from "utils";
+import { http } from "utils";
+import { useMount } from "hook";
 
 type AuthForm = {
   username: string;
