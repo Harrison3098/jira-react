@@ -4,14 +4,12 @@
  * @Date       	: 2023-01-19 星期四 17:35:33
  * @FilePath	: jira/src/context/auth-context.tsx
  */
-import React, { ReactNode, useState } from "react";
+import React, { ReactNode } from "react";
 import * as auth from "auth-provider";
 import { User } from "auth-provider";
 import { http } from "utils";
 import { useAsync, useMount } from "hook";
-import styled from "@emotion/styled";
-import { Spin, Typography } from "antd";
-import { DevTools } from "jira-dev-tool";
+import { FullPageErrorFallBack, FullPageLoading } from "components";
 
 type AuthForm = {
   username: string;
@@ -71,29 +69,4 @@ export const useAuth = () => {
   const context = React.useContext(AuthContext);
   if (!context) throw new Error("useAuth必须在AuthProvide中使用");
   return context;
-};
-
-const FullPage = styled.div`
-  height: 100vh;
-  width: 100vw;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-export const FullPageLoading = () => {
-  return (
-    <FullPage>
-      <Spin size={"large"}></Spin>
-    </FullPage>
-  );
-};
-
-export const FullPageErrorFallBack = (error?: Error | null) => {
-  return (
-    <FullPage>
-      <DevTools></DevTools>
-      <Typography.Text type={"danger"}>{error?.message}</Typography.Text>
-    </FullPage>
-  );
 };
