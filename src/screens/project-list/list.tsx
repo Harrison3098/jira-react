@@ -5,10 +5,10 @@
  * @FilePath	: jira/src/screens/project-list/list.tsx
  */
 import type { User } from "./search-panel";
-import { Table } from "antd";
+import { Table, TableProps } from "antd";
 import dayjs from "dayjs";
 
-export const List = ({ list, users }: ListProps) => {
+export const List = ({ users, ...tableProps }: ListProps) => {
   const columns = [
     {
       title: "名称",
@@ -41,15 +41,15 @@ export const List = ({ list, users }: ListProps) => {
 
   return (
     <Table
+      {...tableProps}
       rowKey={(record) => record.id}
       pagination={false}
-      dataSource={list}
       columns={columns}
     ></Table>
   );
 };
 
-type Project = {
+export type Project = {
   id: string;
   name: string;
   personId: string;
@@ -58,7 +58,6 @@ type Project = {
   created?: string;
 };
 
-type ListProps = {
-  list: Project[];
+interface ListProps extends TableProps<Project> {
   users: User[];
-};
+}
