@@ -47,7 +47,7 @@ export const FullPageLoading = () => {
   );
 };
 
-export const FullPageErrorFallBack = (error?: Error | null) => {
+export const FullPageErrorFallBack = ({ error }: { error?: Error | null }) => {
   return (
     <FullPage>
       <DevTools></DevTools>

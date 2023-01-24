@@ -54,7 +54,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   useMount(() => run(initUser()));
 
-  if (isFail) return FullPageErrorFallBack(error);
+  if (isFail) return FullPageErrorFallBack({ error });
 
   if (isLoading || isIdle) return FullPageLoading();
 
