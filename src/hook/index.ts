@@ -6,6 +6,7 @@
  */
 import { useEffect, useState } from "react";
 
+export { useDocumentTitle } from "./use-document-title";
 export { useUsers } from "./use-users";
 export { useProjects } from "./use-projects";
 export { useAsync } from "./use-async";

@@ -10,10 +10,13 @@ import { LoginScreen } from "unauthenticated-app/login";
 import { Button, Card, Divider, Typography } from "antd";
 import styled from "@emotion/styled";
 import logo from "logo.svg";
+import { useDocumentTitle } from "hook";
 
 export const UnauthenticatedApp = () => {
   const [isRegister, setIsRegister] = useState(false);
   const [error, setError] = useState<Error | null>(null);
+
+  useDocumentTitle("请登录", false);
 
   return (
     <Container>
