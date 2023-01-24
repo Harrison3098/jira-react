@@ -24,3 +24,7 @@ export const cleanObject = <T extends { [key: string]: K }, K = unknown>(
     };
   }, {} as T);
 };
+
+export const resetRoute = () => {
+  globalThis.location.href = globalThis.location.origin;
+};
