@@ -6,11 +6,11 @@
  */
 import { useEffect, useState } from "react";
 
+export { useUrlQueryParam } from "./use-url";
 export { useDocumentTitle } from "./use-document-title";
 export { useUsers } from "./use-users";
 export { useProjects } from "./use-projects";
 export { useAsync } from "./use-async";
-
 export const useMount = (cb: Function) => {
   useEffect(() => {
     cb();

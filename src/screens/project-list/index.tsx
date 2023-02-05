@@ -6,16 +6,12 @@
  */
 import { SearchPanel } from "./search-panel";
 import { List } from "./list";
-import { useState } from "react";
-import { useDebounce, useProjects, useUsers } from "hook";
+import { useDebounce, useProjects, useUrlQueryParam, useUsers } from "hook";
 import styled from "@emotion/styled";
 import { Typography } from "antd";
 
 export const ProjectList = () => {
-  const [param, setParam] = useState({
-    name: "",
-    personId: "",
-  });
+  const [param, setParam] = useUrlQueryParam(["name", "personId"]);
 
   const { isLoading, error, data: list } = useProjects(useDebounce(param, 500));
   const { data: users } = useUsers();
@@ -43,7 +39,7 @@ export const ProjectList = () => {
   );
 };
 
-ProjectList.whyDidYouRender = true;
+// ProjectList.whyDidYouRender = true;
 
 const Container = styled.div`
   padding: 0 3.2rem;
