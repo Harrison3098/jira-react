@@ -8,11 +8,9 @@ export { http, useHttp } from "./http";
 /**
  * 清除对象里的空值（0除外）
  * @param {T} obj
- * @returns {T}
+ * @returns {Partial<T>}
  */
-export const cleanObject = <T extends { [key: string]: K }, K = unknown>(
-  obj?: T
-) => {
+export const cleanObject = <T>(obj?: T): Partial<T> => {
   if (!obj) return {};
 
   return Object.entries(obj).reduce((tempObj, [key, value]) => {
