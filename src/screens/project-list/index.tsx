@@ -43,6 +43,8 @@ export const ProjectList = () => {
   );
 };
 
+ProjectList.whyDidYouRender = true;
+
 const Container = styled.div`
   padding: 0 3.2rem;
 `;
