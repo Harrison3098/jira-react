@@ -24,7 +24,7 @@ export const SearchPanel = ({ users, param, setParam }: SearchPanelProps) => {
       <Form.Item>
         <Select
           placeholder={"负责人"}
-          value={param.personId}
+          value={users?.length ? param.personId : ""}
           onChange={(v) => setParam({ ...param, personId: v })}
         >
           <Select.Option value={""} key={"all"}>
@@ -32,7 +32,7 @@ export const SearchPanel = ({ users, param, setParam }: SearchPanelProps) => {
           </Select.Option>
 
           {users.map((i) => (
-            <Select.Option value={i.id} key={i.id}>
+            <Select.Option value={String(i.id)} key={i.id}>
               {i.name}
             </Select.Option>
           ))}
