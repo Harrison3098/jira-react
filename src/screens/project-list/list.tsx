@@ -8,9 +8,33 @@ import type { User } from "./search-panel";
 import { Table, TableProps } from "antd";
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
+import { Collection } from "components/collection";
+import { useEditProject } from "../../hook/use-projects";
 
-export const List = ({ users, ...tableProps }: ListProps) => {
+export const List = ({ users, updateList, ...tableProps }: ListProps) => {
+  const { dataSource: list } = tableProps;
+  const { mutate } = useEditProject();
+
+  const pinProject = (id: number) => (pin: boolean) =>
+    mutate({ id, pin }).then((res) => {
+      if (!list) return;
+      const { id, pin } = res as Project;
+
+      updateList(list?.map((i) => (i.id !== id ? i : { ...i, pin })));
+    });
+
   const columns = [
+    {
+      title: <Collection checked={true} disabled={true} />,
+      render(value: unknown, { id, pin }: Project) {
+        return (
+          <Collection
+            checked={pin}
+            onCheckedChange={pinProject(id)}
+          ></Collection>
+        );
+      },
+    },
     {
       title: "名称",
       dataIndex: "name",
@@ -54,7 +78,7 @@ export const List = ({ users, ...tableProps }: ListProps) => {
 };
 
 export type Project = {
-  id: string;
+  id: number;
   name: string;
   personId: string;
   pin: boolean;
@@ -64,4 +88,5 @@ export type Project = {
 
 interface ListProps extends TableProps<Project> {
   users: User[];
+  updateList: (data: Project[]) => Project[];
 }
