@@ -5,6 +5,7 @@
  * @FilePath	: jira/src/utils/use-async.ts
  */
 import { useState } from "react";
+import { useMountedRef } from "./index";
 
 const __defaultInitialState: State<null> = {
   status: "idle",
@@ -30,8 +31,19 @@ export const useAsync = <D>(
     ...initialState,
   });
 
+  /**
+   * 安全 - 阻止在已卸载组件上赋值
+   * @type {React.MutableRefObject<boolean>}
+   */
+  const mountedRef = useMountedRef();
+  const setStateOnMounted = (data: State<D>) => {
+    if (!mountedRef.current) return;
+
+    setState(data);
+  };
+
   const setData = (data: D) => {
-    setState({
+    setStateOnMounted({
       data,
       status: "success",
       error: null,
@@ -41,7 +53,7 @@ export const useAsync = <D>(
   };
 
   const setFail = (error: Error | null) => {
-    setState({
+    setStateOnMounted({
       data: null,
       status: "fail",
       error,

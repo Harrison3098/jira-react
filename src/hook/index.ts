@@ -4,7 +4,7 @@
  * @Date       	: 2023-01-20 星期五 22:54:14
  * @FilePath	: jira/src/hook/index.ts
  */
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export { useUrlQueryParam } from "./use-url";
 export { useDocumentTitle } from "./use-document-title";
@@ -27,4 +27,21 @@ export const useDebounce = <V>(value: V, delay = 0): V => {
   }, [value, delay]);
 
   return useValue;
+};
+
+/**
+ * 返回组件的挂载状态
+ */
+export const useMountedRef = () => {
+  const mountedRef = useRef(false);
+
+  useEffect(() => {
+    mountedRef.current = true;
+
+    return () => {
+      mountedRef.current = false;
+    };
+  });
+
+  return mountedRef;
 };
