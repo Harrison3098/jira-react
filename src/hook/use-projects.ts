@@ -15,7 +15,7 @@ export const useProjects = (param: Partial<Project>) => {
 
   useEffect(() => {
     run(client("projects", { data: param }));
-  }, [param]);
+  }, [param, run, client]);
 
   return result;
 };
@@ -45,5 +45,5 @@ export const useAddProject = () => {
       })
     );
   };
-  return { mutate };
+  return { mutate, ...asyncResult };
 };

@@ -4,7 +4,7 @@
  * @Date       	: 2023-01-23 星期一 17:24:52
  * @FilePath	: jira/src/utils/use-async.ts
  */
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useMountedRef } from "./index";
 
 const __defaultInitialState: State<null> = {
@@ -36,44 +36,56 @@ export const useAsync = <D>(
    * @type {React.MutableRefObject<boolean>}
    */
   const mountedRef = useMountedRef();
-  const setStateOnMounted = (data: State<D>) => {
-    if (!mountedRef.current) return;
+  const setStateOnMounted = useCallback(
+    (data: State<D>) => {
+      if (!mountedRef.current) return;
 
-    setState(data);
-  };
+      setState(data);
+    },
+    [mountedRef]
+  );
 
-  const setData = (data: D) => {
-    setStateOnMounted({
-      data,
-      status: "success",
-      error: null,
-    });
+  const setData = useCallback(
+    (data: D) => {
+      setStateOnMounted({
+        data,
+        status: "success",
+        error: null,
+      });
 
-    return data;
-  };
+      return data;
+    },
+    [setStateOnMounted]
+  );
 
-  const setFail = (error: Error | null) => {
-    setStateOnMounted({
-      data: null,
-      status: "fail",
-      error,
-    });
+  const setFail = useCallback(
+    (error: Error | null) => {
+      setStateOnMounted({
+        data: null,
+        status: "fail",
+        error,
+      });
 
-    return config?.throwOnError ? Promise.reject(error) : error;
-  };
+      return config?.throwOnError ? Promise.reject(error) : error;
+    },
+    [config?.throwOnError, setStateOnMounted]
+  );
 
   /**
    * 执行异步函数
    * @param {Promise<D>} p
    * @returns {Promise<D | Error | null>}
    */
-  const run = (p: Promise<D>) => {
-    if (!p || !p.then) throw new Error("请传入 Promise 类型数据");
+  const run = useCallback(
+    (p: Promise<D>) => {
+      if (!p || !p.then) throw new Error("请传入 Promise 类型数据");
 
-    setState({ ...state, status: "loading" });
+      setState((prevState) => ({ ...prevState, status: "loading" }));
 
-    return p.then(setData).catch(setFail);
-  };
+      return p.then(setData).catch(setFail);
+    },
+    [setData, setFail]
+  );
 
   return {
     isIdle: Object.is(state.status, "idle"),
