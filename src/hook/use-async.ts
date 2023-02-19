@@ -4,8 +4,8 @@
  * @Date       	: 2023-01-23 星期一 17:24:52
  * @FilePath	: jira/src/utils/use-async.ts
  */
-import { useCallback, useState } from "react";
-import { useMountedRef } from "./index";
+import { useCallback, useReducer } from "react";
+import { useMountedRef } from "./";
 
 const __defaultInitialState: State<null> = {
   status: "idle",
@@ -17,6 +17,17 @@ const __defaultConfig = {
   throwOnError: false,
 };
 
+const useSafeDispatch = <T>(dispatch: (...args: T[]) => void) => {
+  const mountedRef = useMountedRef();
+
+  return useCallback(
+    (...args: T[]) => {
+      return mountedRef.current ? dispatch(...args) : void 0;
+    },
+    [dispatch, mountedRef]
+  );
+};
+
 export const useAsync = <D>(
   initialState?: State<D>,
   initialConfig?: typeof __defaultConfig
@@ -26,24 +37,39 @@ export const useAsync = <D>(
     ...initialConfig,
   };
 
-  const [state, setState] = useState<State<D>>({
-    ...__defaultInitialState,
-    ...initialState,
-  });
+  /**
+   * 原：useState
+   */
+  // const [state, setState] = useState<State<D>>({
+  //   ...__defaultInitialState,
+  //   ...initialState,
+  // });
+
+  /**
+   * 升级：useReducer
+   */
+  const [state, dispatch] = useReducer(
+    (state: State<D>, action: Partial<State<D>>) => ({ ...state, ...action }),
+    {
+      ...__defaultInitialState,
+      ...initialState,
+    }
+  );
 
   /**
    * 安全 - 阻止在已卸载组件上赋值
    * @type {React.MutableRefObject<boolean>}
    */
-  const mountedRef = useMountedRef();
-  const setStateOnMounted = useCallback(
-    (data: State<D>) => {
-      if (!mountedRef.current) return;
-
-      setState(data);
-    },
-    [mountedRef]
-  );
+  // const mountedRef = useMountedRef();
+  // const setStateOnMounted = useCallback(
+  //   (data: State<D>) => {
+  //     if (!mountedRef.current) return;
+  //
+  //     setState(data);
+  //   },
+  //   [mountedRef]
+  // );
+  const setStateOnMounted = useSafeDispatch(dispatch);
 
   const setData = useCallback(
     (data: D) => {
@@ -80,11 +106,11 @@ export const useAsync = <D>(
     (p: Promise<D>) => {
       if (!p || !p.then) throw new Error("请传入 Promise 类型数据");
 
-      setState((prevState) => ({ ...prevState, status: "loading" }));
+      setStateOnMounted({ status: "loading" });
 
       return p.then(setData).catch(setFail);
     },
-    [setData, setFail]
+    [setData, setFail, setStateOnMounted]
   );
 
   return {
