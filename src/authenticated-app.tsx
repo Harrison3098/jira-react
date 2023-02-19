@@ -6,7 +6,7 @@
  */
 import { useAuth } from "context/auth-context";
 import styled from "@emotion/styled";
-import { Row } from "components";
+import { ButtonNoPadding, Row } from "components";
 import { ProjectList } from "screens/project-list";
 import { ReactComponent as Logo } from "logo.svg";
 import { Button, Dropdown, MenuProps } from "antd";
@@ -14,6 +14,8 @@ import { Navigate, Route, Routes } from "react-router";
 import { BrowserRouter as Router } from "react-router-dom";
 import { ProjectScreen } from "screens/project";
 import { resetRoute } from "utils";
+import { ProjectModal } from "screens/project-list/project-modal";
+import { ProjectPopover } from "components/project-popover";
 
 export const AuthenticatedApp = () => {
   return (
@@ -25,6 +27,8 @@ export const AuthenticatedApp = () => {
       <Main>
         <PageRouter></PageRouter>
       </Main>
+
+      {/*<ProjectModal></ProjectModal>*/}
 
       {/*<Aside>aside</Aside>*/}
 
@@ -89,11 +93,13 @@ const PageHeader = () => {
   return (
     <Header as={"header"} between={true}>
       <HeaderLeft gap={true}>
-        <Button type={"link"} onClick={resetRoute}>
+        <ButtonNoPadding type={"link"} onClick={resetRoute}>
           <Logo width={"8rem"} color={"rgb(38, 132, 255)"}></Logo>
-        </Button>
-        <h3>项目</h3>
-        <h3>用户</h3>
+        </ButtonNoPadding>
+
+        <ProjectPopover></ProjectPopover>
+
+        <span>用户</span>
       </HeaderLeft>
 
       <HeaderRight>

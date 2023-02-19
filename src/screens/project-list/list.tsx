@@ -5,11 +5,12 @@
  * @FilePath	: jira/src/screens/project-list/list.tsx
  */
 import type { User } from "./search-panel";
-import { Table, TableProps } from "antd";
+import { Dropdown, Table, TableProps } from "antd";
 import dayjs from "dayjs";
 import { Link } from "react-router-dom";
 import { Collection } from "components/collection";
-import { useEditProject } from "../../hook/use-projects";
+import { useEditProject } from "hook/use-projects";
+import { ButtonNoPadding } from "components";
 
 export const List = ({ users, updateList, ...tableProps }: ListProps) => {
   const { dataSource: list } = tableProps;
@@ -62,6 +63,24 @@ export const List = ({ users, updateList, ...tableProps }: ListProps) => {
       render(value: unknown, { created }: Project) {
         return (
           <span>{created ? dayjs(created).format("YYYY-MM-DD") : "---"}</span>
+        );
+      },
+    },
+    {
+      render(value: unknown, project: Project) {
+        return (
+          <Dropdown
+            menu={{
+              items: [
+                {
+                  key: "edit",
+                  label: <ButtonNoPadding type={"link"}>编辑</ButtonNoPadding>,
+                },
+              ],
+            }}
+          >
+            <ButtonNoPadding type={"link"}>...</ButtonNoPadding>
+          </Dropdown>
         );
       },
     },

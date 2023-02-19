@@ -9,7 +9,7 @@ import { useHttp } from "utils";
 import { Project } from "screens/project-list/list";
 import { useAsync } from "hook";
 
-export const useProjects = (param: Partial<Project>) => {
+export const useProjects = (param?: Partial<Project>) => {
   const client = useHttp();
   const { run, ...result } = useAsync<Project[]>();
 
