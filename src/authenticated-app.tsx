@@ -28,7 +28,7 @@ export const AuthenticatedApp = () => {
         <PageRouter></PageRouter>
       </Main>
 
-      {/*<ProjectModal></ProjectModal>*/}
+      <ProjectModal></ProjectModal>
 
       {/*<Aside>aside</Aside>*/}
 

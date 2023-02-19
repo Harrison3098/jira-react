@@ -11,10 +11,13 @@ import { Link } from "react-router-dom";
 import { Collection } from "components/collection";
 import { useEditProject } from "hook/use-projects";
 import { ButtonNoPadding } from "components";
+import { useDispatch } from "react-redux";
+import { projectListActions } from "./project-list.slice";
 
 export const List = ({ users, updateList, ...tableProps }: ListProps) => {
   const { dataSource: list } = tableProps;
   const { mutate } = useEditProject();
+  const dispatch = useDispatch();
 
   const pinProject = (id: number) => (pin: boolean) =>
     mutate({ id, pin }).then((res) => {
@@ -67,14 +70,23 @@ export const List = ({ users, updateList, ...tableProps }: ListProps) => {
       },
     },
     {
-      render(value: unknown, project: Project) {
+      render() {
         return (
           <Dropdown
             menu={{
               items: [
                 {
                   key: "edit",
-                  label: <ButtonNoPadding type={"link"}>编辑</ButtonNoPadding>,
+                  label: (
+                    <ButtonNoPadding
+                      onClick={() =>
+                        dispatch(projectListActions.openProjectModal())
+                      }
+                      type={"link"}
+                    >
+                      编辑
+                    </ButtonNoPadding>
+                  ),
                 },
               ],
             }}

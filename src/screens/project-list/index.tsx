@@ -10,9 +10,12 @@ import { useDebounce, useProjects, useUrlQueryParam, useUsers } from "hook";
 import styled from "@emotion/styled";
 import { Button, Typography } from "antd";
 import { Row } from "components";
+import { useDispatch } from "react-redux";
+import { projectListActions } from "./project-list.slice";
 
 export const ProjectList = () => {
   const [param, setParam] = useUrlQueryParam(["name", "personId"]);
+  const dispatch = useDispatch();
 
   const {
     isLoading,
@@ -27,7 +30,9 @@ export const ProjectList = () => {
       <Row between={true}>
         <h1>项目列表</h1>
 
-        <Button> 创建项目</Button>
+        <Button onClick={() => dispatch(projectListActions.openProjectModal())}>
+          创建项目
+        </Button>
       </Row>
 
       <SearchPanel
