@@ -51,7 +51,7 @@ export const FullPageErrorFallBack = ({ error }: { error?: Error | null }) => {
   return (
     <FullPage>
       <DevTools></DevTools>
-      <Typography.Text type={"danger"}>{error?.message}</Typography.Text>
+      <ErrorBox error={error}></ErrorBox>
     </FullPage>
   );
 };
@@ -59,3 +59,16 @@ export const FullPageErrorFallBack = ({ error }: { error?: Error | null }) => {
 export const ButtonNoPadding = styled(Button)`
   padding: 0;
 `;
+
+/**
+ * ts 类型守卫
+ * @param error
+ * @constructor
+ */
+const isError = (val: any): val is Error => val?.message;
+
+export const ErrorBox = ({ error }: { error: unknown }) => {
+  return isError(error) ? (
+    <Typography.Text type={"danger"}>{error?.message}</Typography.Text>
+  ) : null;
+};

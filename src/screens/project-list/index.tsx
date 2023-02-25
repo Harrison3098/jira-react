@@ -8,14 +8,14 @@ import { SearchPanel } from "./search-panel";
 import { List } from "./list";
 import {
   useDebounce,
+  useProjectModal,
   useProjects,
   useUrlQueryParam,
   useUsers,
-  useProjectModal,
 } from "hook";
 import styled from "@emotion/styled";
-import { Button, Typography } from "antd";
-import { Row } from "components";
+import { Button } from "antd";
+import { ErrorBox, Row } from "components";
 
 export const ProjectList = () => {
   const [param, setParam] = useUrlQueryParam(["name", "personId"]);
@@ -43,9 +43,7 @@ export const ProjectList = () => {
         setParam={setParam}
       ></SearchPanel>
 
-      {error && (
-        <Typography.Text type={"danger"}>{error.message}</Typography.Text>
-      )}
+      <ErrorBox error={error}></ErrorBox>
 
       <List
         loading={isLoading}
