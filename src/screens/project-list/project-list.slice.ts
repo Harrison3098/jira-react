@@ -22,7 +22,7 @@ const projectListSlice = createSlice({
   },
 });
 
-export const projectListActions = projectListSlice.actions;
-export const projectListReducer = projectListSlice.reducer;
+export const { reducer: projectListReducer, actions: projectListActions } =
+  projectListSlice;
 export const selectProjectModalVisible = (state: RootState) =>
-  state.projectReducer.projectModalVisible;
+  state.projectListReducer.projectModalVisible;
