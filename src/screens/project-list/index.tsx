@@ -6,13 +6,20 @@
  */
 import { SearchPanel } from "./search-panel";
 import { List } from "./list";
-import { useDebounce, useProjects, useUrlQueryParam, useUsers } from "hook";
+import {
+  useDebounce,
+  useProjects,
+  useUrlQueryParam,
+  useUsers,
+  useProjectModal,
+} from "hook";
 import styled from "@emotion/styled";
 import { Button, Typography } from "antd";
 import { Row } from "components";
 
 export const ProjectList = () => {
   const [param, setParam] = useUrlQueryParam(["name", "personId"]);
+  const { open: projectModalOpen } = useProjectModal();
 
   const {
     isLoading,
@@ -27,7 +34,7 @@ export const ProjectList = () => {
       <Row between={true}>
         <h1>项目列表</h1>
 
-        <Button> 创建项目</Button>
+        <Button onClick={projectModalOpen}>创建项目</Button>
       </Row>
 
       <SearchPanel

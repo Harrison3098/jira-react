@@ -6,7 +6,7 @@
  */
 import { useEffect, useRef, useState } from "react";
 
-export { useUrlQueryParam } from "./use-url";
+export { useUrlQueryParam, useProjectModal } from "./use-url";
 export { useDocumentTitle } from "./use-document-title";
 export { useUsers } from "./use-users";
 export { useProjects } from "./use-projects";
@@ -19,7 +19,6 @@ export const useMount = (cb: Function) => {
 
 export const useDebounce = <V>(value: V, delay = 0): V => {
   const [useValue, setUseValue] = useState<V>(value);
-
   useEffect(() => {
     const timerId = globalThis.setTimeout(() => setUseValue(value), delay);
 

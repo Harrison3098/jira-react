@@ -20,19 +20,21 @@ import { ProjectPopover } from "components/project-popover";
 export const AuthenticatedApp = () => {
   return (
     <Container>
-      <PageHeader></PageHeader>
+      <Router>
+        <PageHeader></PageHeader>
 
-      {/*<Nav>nav</Nav>*/}
+        {/*<Nav>nav</Nav>*/}
 
-      <Main>
-        <PageRouter></PageRouter>
-      </Main>
+        <Main>
+          <PageRouter></PageRouter>
+        </Main>
 
-      {/*<ProjectModal></ProjectModal>*/}
+        <ProjectModal></ProjectModal>
 
-      {/*<Aside>aside</Aside>*/}
+        {/*<Aside>aside</Aside>*/}
 
-      {/*<Footer>footer</Footer>*/}
+        {/*<Footer>footer</Footer>*/}
+      </Router>
     </Container>
   );
 };
@@ -128,12 +130,10 @@ const PageRouter = () => {
   ];
 
   return (
-    <Router>
-      <Routes>
-        {routeItems.map((i) => (
-          <Route key={i.path} path={i.path} element={i.element}></Route>
-        ))}
-      </Routes>
-    </Router>
+    <Routes>
+      {routeItems.map((i) => (
+        <Route key={i.path} path={i.path} element={i.element}></Route>
+      ))}
+    </Routes>
   );
 };

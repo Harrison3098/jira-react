@@ -11,10 +11,12 @@ import { Link } from "react-router-dom";
 import { Collection } from "components/collection";
 import { useEditProject } from "hook/use-projects";
 import { ButtonNoPadding } from "components";
+import { useProjectModal } from "hook";
 
 export const List = ({ users, updateList, ...tableProps }: ListProps) => {
   const { dataSource: list } = tableProps;
   const { mutate } = useEditProject();
+  const { open: projectModalOpen } = useProjectModal();
 
   const pinProject = (id: number) => (pin: boolean) =>
     mutate({ id, pin }).then((res) => {
@@ -74,7 +76,11 @@ export const List = ({ users, updateList, ...tableProps }: ListProps) => {
               items: [
                 {
                   key: "edit",
-                  label: <ButtonNoPadding type={"link"}>编辑</ButtonNoPadding>,
+                  label: (
+                    <ButtonNoPadding type={"link"} onClick={projectModalOpen}>
+                      编辑
+                    </ButtonNoPadding>
+                  ),
                 },
               ],
             }}
