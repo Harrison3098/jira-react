@@ -7,9 +7,10 @@
  * @Date       	: 2023-01-21 星期六 20:51:51
  * @FilePath	: jira/src/screens/project-list/search-panel.tsx
  */
-import { Form, Input, Select } from "antd";
+import { Form, Input } from "antd";
+import { UserSelect } from "./user-select";
 
-export const SearchPanel = ({ users, param, setParam }: SearchPanelProps) => {
+export const SearchPanel = ({ param, setParam }: SearchPanelProps) => {
   return (
     <Form style={{ marginBottom: "2rem" }} layout={"inline"}>
       <Form.Item>
@@ -22,21 +23,11 @@ export const SearchPanel = ({ users, param, setParam }: SearchPanelProps) => {
       </Form.Item>
 
       <Form.Item>
-        <Select
-          placeholder={"负责人"}
-          value={users?.length ? param.personId : ""}
-          onChange={(v) => setParam({ ...param, personId: v })}
-        >
-          <Select.Option value={""} key={"all"}>
-            全部人
-          </Select.Option>
-
-          {users.map((i) => (
-            <Select.Option value={String(i.id)} key={i.id}>
-              {i.name}
-            </Select.Option>
-          ))}
-        </Select>
+        <UserSelect
+          defaultOptionName={"负责人"}
+          value={+param.personId}
+          onChange={(id) => setParam({ ...param, personId: String(id) })}
+        ></UserSelect>
       </Form.Item>
     </Form>
   );
@@ -51,7 +42,6 @@ export type User = {
 };
 
 type SearchPanelProps = {
-  users: User[];
   param: {
     name: string;
     personId: string;

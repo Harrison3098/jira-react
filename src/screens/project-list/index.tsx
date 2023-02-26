@@ -37,11 +37,7 @@ export const ProjectList = () => {
         <Button onClick={projectModalOpen}>创建项目</Button>
       </Row>
 
-      <SearchPanel
-        users={users || []}
-        param={param}
-        setParam={setParam}
-      ></SearchPanel>
+      <SearchPanel param={param} setParam={setParam}></SearchPanel>
 
       <ErrorBox error={error}></ErrorBox>
 
