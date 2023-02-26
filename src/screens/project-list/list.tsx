@@ -70,11 +70,10 @@ export const List = ({ users /*, updateList*/, ...tableProps }: ListProps) => {
                 {
                   key: "edit",
                   label: (
-                    <ButtonNoPadding type={"link"} onClick={projectModalOpen}>
-                      编辑
-                    </ButtonNoPadding>
+                    <span onClick={() => editProject(project.id)}>编辑</span>
                   ),
                 },
+                { key: "delete", label: <span>删除</span> },
               ],
             }}
           >

@@ -1,6 +1,7 @@
 import { URLSearchParamsInit, useSearchParams } from "react-router-dom";
 import { useMemo, useState } from "react";
 import { cleanObject } from "utils";
+import { useProject } from "./use-projects";
 
 /**
  * 返回页面url中，指定键的参数值
@@ -13,7 +14,7 @@ export const useUrlQueryParam = <K extends string>(keys: K[]) => {
 
   const params = useMemo(
     () =>
-      keys.reduce((prev, key: string) => {
+      useKeys.reduce((prev, key: string) => {
         return {
           ...prev,
           [key]: searchParams.get(key) ?? "",
@@ -35,14 +36,31 @@ export const useUrlQueryParam = <K extends string>(keys: K[]) => {
 };
 
 export const useProjectModal = () => {
-  const [{ projectCreate }, setProjectCreate] = useUrlQueryParam([
-    "projectCreate",
-  ]);
+  const [{ projectCreate, editingProjectId }, setProjectModal] =
+    useUrlQueryParam(["projectCreate", "editingProjectId"]);
+
+  const { data: editingProject, isLoading } = useProject(+editingProjectId);
+
+  const open = () =>
+    setProjectModal({ projectCreate: true, editingProjectId: undefined });
+  const close = () => {
+    setProjectModal({ projectCreate: undefined, editingProjectId: undefined });
+  };
+  const startEdit = (id: number) =>
+    setProjectModal({ projectCreate: undefined, editingProjectId: id });
 
   return {
-    projectModalVisible: Object.is(projectCreate, "true"),
-    open: () => setProjectCreate({ projectCreate: true }),
-    close: () => setProjectCreate({ projectCreate: undefined }),
+    projectModalVisible: Object.is(projectCreate, "true") || !!editingProjectId,
+    title: Object.is(projectCreate, "true")
+      ? "创建项目"
+      : editingProjectId
+      ? "编辑项目"
+      : "未知",
+    open,
+    close,
+    startEdit,
+    editingProject,
+    isLoading,
   };
   // return [projectCreate === "true", open, close] as const;
 };
