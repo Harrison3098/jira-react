@@ -4,46 +4,106 @@
  * @Date       	: 2023-01-23 星期一 17:53:46
  * @FilePath	: jira/src/utils/use-projects.ts
  */
-import { useEffect } from "react";
 import { useHttp } from "utils";
 import { Project } from "screens/project-list/list";
-import { useAsync } from "hook";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 
 export const useProjects = (param?: Partial<Project>) => {
   const client = useHttp();
-  const { run, ...result } = useAsync<Project[]>();
 
-  useEffect(() => {
-    run(client("projects", { data: param }));
-  }, [param, run, client]);
+  /**
+   * useQuery
+   */
+  return useQuery<Project[], Error>(["projects", param], () =>
+    client("projects", { data: param })
+  );
 
-  return result;
+  /**
+   * useAsync
+   */
+  // const { run, ...result } = useAsync<Project[]>();
+  //
+  // useEffect(() => {
+  //   run(client("projects", { data: param }));
+  // }, [param, run, client]);
+  //
+  // return result;
 };
 
 export const useEditProject = () => {
-  const { run, ...asyncResult } = useAsync();
   const client = useHttp();
-  const mutate = (params: Partial<Project>) => {
-    return run(
-      client(`projects/${params.id}`, {
+  const queryClient = useQueryClient();
+
+  /**
+   * useMutation
+   */
+  return useMutation(
+    (params: Partial<Project>) => {
+      return client(`projects/${params.id}`, {
         data: params,
         method: "PATCH",
-      })
-    );
-  };
-  return { mutate, ...asyncResult };
+      });
+    },
+    {
+      onSuccess: () => queryClient.invalidateQueries("projects"),
+    }
+  );
+  /**
+   * useAsync
+   */
+  // const { run, ...asyncResult } = useAsync();
+  // const mutate = (params: Partial<Project>) => {
+  //   return run(
+  //     client(`projects/${params.id}`, {
+  //       data: params,
+  //       method: "PATCH",
+  //     })
+  //   );
+  // };
+  // return { mutate, ...asyncResult };
 };
 
 export const useAddProject = () => {
-  const { run, ...asyncResult } = useAsync();
   const client = useHttp();
-  const mutate = (params: Partial<Project>) => {
-    return run(
-      client(`projects/${params.id}`, {
+  const queryClient = useQueryClient();
+
+  /**
+   * useMutation
+   */
+  return useMutation(
+    (params: Partial<Project>) => {
+      return client(`projects`, {
         data: params,
         method: "POST",
-      })
-    );
-  };
-  return { mutate, ...asyncResult };
+      });
+    },
+    {
+      onSuccess: () => queryClient.invalidateQueries("projects"),
+    }
+  );
+  /**
+   * useAsync
+   */
+  // const { run, ...asyncResult } = useAsync();
+  // const mutate = (params: Partial<Project>) => {
+  //   return run(
+  //     client(`projects/${params.id}`, {
+  //       data: params,
+  //       method: "POST",
+  //     })
+  //   );
+  // };
+  // return { mutate, ...asyncResult };
+};
+
+export const useProject = (id?: number) => {
+  const client = useHttp();
+
+  return useQuery<Project>(
+    ["project", { id }],
+    () => client(`projects/${id}`),
+    {
+      enabled: !!id,
+    }
+  );
 };

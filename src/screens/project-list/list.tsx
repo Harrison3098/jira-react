@@ -13,18 +13,11 @@ import { useEditProject } from "hook/use-projects";
 import { ButtonNoPadding } from "components";
 import { useProjectModal } from "hook";
 
-export const List = ({ users, updateList, ...tableProps }: ListProps) => {
-  const { dataSource: list } = tableProps;
+export const List = ({ users /*, updateList*/, ...tableProps }: ListProps) => {
   const { mutate } = useEditProject();
-  const { open: projectModalOpen } = useProjectModal();
+  const { startEdit: editProject } = useProjectModal();
 
-  const pinProject = (id: number) => (pin: boolean) =>
-    mutate({ id, pin }).then((res) => {
-      if (!list) return;
-      const { id, pin } = res as Project;
-
-      updateList(list?.map((i) => (i.id !== id ? i : { ...i, pin })));
-    });
+  const pinProject = (id: number) => (pin: boolean) => mutate({ id, pin });
 
   const columns = [
     {
@@ -113,5 +106,5 @@ export type Project = {
 
 interface ListProps extends TableProps<Project> {
   users: User[];
-  updateList: (data: Project[]) => Project[];
+  // updateList: (data: Project[]) => Project[];
 }

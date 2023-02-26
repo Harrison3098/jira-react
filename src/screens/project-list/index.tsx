@@ -21,12 +21,7 @@ export const ProjectList = () => {
   const [param, setParam] = useUrlQueryParam(["name", "personId"]);
   const { open: projectModalOpen } = useProjectModal();
 
-  const {
-    isLoading,
-    error,
-    data: list,
-    setData: updateList,
-  } = useProjects(useDebounce(param, 500));
+  const { isLoading, error, data: list } = useProjects(useDebounce(param, 500));
   const { data: users } = useUsers();
 
   return (
@@ -45,7 +40,6 @@ export const ProjectList = () => {
         loading={isLoading}
         dataSource={list || []}
         users={users || []}
-        updateList={updateList}
       ></List>
     </Container>
   );
